@@ -1,0 +1,27 @@
+name: tag
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # also fetch tags
+      - run: echo '${{ toJSON(github.event) }}'
+      - run: |
+          ELASTIC_APM_NODE_VERSION="v$(jq -r '.dependencies."elastic-apm-node".version' package-lock.json)"
+          
+          # if the version does not exist
+          if [[ ! $(git tag -l "${ELASTIC_APM_NODE_VERSION}") ]]; then
+            git tag ${ELASTIC_APM_NODE_VERSION}
+            git push "refs/tags/${ELASTIC_APM_NODE_VERSION}"
+          fi
+          
