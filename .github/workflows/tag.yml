@@ -9,4 +9,4 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ toJSON(github.event.head_commit) }}"
+      - run: echo '${{ toJSON(github.event.head_commit) }}'
