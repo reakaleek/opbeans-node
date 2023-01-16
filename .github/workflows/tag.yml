@@ -10,9 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo '${{ toJSON(github.event) }}'
-      - id: files
-        uses: jitterbit/get-changed-files@v1
       - run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "Do something with this ${changed_file}."
-          done
+          ELASTIC_APM_NODE_VERSION="v$(jq -r '.dependencies."elastic-apm-node".version' package-lock.json)"
+          
+          # if the version does not exist
+          if [[ ! $(git tag -l "${ELASTIC_APM_NODE_VERSION}") ]]; then
+            git tag ${ELASTIC_APM_NODE_VERSION}
+            git push "refs/tags/${ELASTIC_APM_NODE_VERSION}"
+          fi
+          
