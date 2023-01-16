@@ -22,6 +22,6 @@ jobs:
           # if the version does not exist
           if [[ ! $(git tag -l "${ELASTIC_APM_NODE_VERSION}") ]]; then
             git tag ${ELASTIC_APM_NODE_VERSION}
-            git push "refs/tags/${ELASTIC_APM_NODE_VERSION}"
+            git push origin "refs/tags/${ELASTIC_APM_NODE_VERSION}"
           fi
           
